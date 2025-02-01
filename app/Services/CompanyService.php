@@ -4,10 +4,12 @@ namespace App\Services;
 
 use App\Exceptions\CompanyException;
 use App\Http\Requests\CreateCompanyRequest;
+use App\Http\Requests\EditCompanyRequest;
 use App\Models\Company;
 use Exception;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class CompanyService
 {
@@ -40,10 +42,21 @@ class CompanyService
     /**
      * @throws CompanyException
      */
-    public function editCompany(array $validated, Company $company): Company
+    public function editCompany(EditCompanyRequest $request, Company $company): Company
     {
         DB::beginTransaction();
         try {
+            $validated = $request->validated();
+            if ($request->hasFile('logo')) {
+                if ($company->logo && Storage::exists('public/' . $company->logo)) {
+                    Storage::delete('public/' . $company->logo);
+                }
+
+                $path = $request->file('logo')->store('', 'public');
+                $validated['logo'] = $path;
+            } else {
+                unset($validated['logo']);
+            }
             $company->update($validated);
             DB::commit();
         } catch (Exception $e) {

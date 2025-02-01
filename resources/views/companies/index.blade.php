@@ -32,7 +32,7 @@
                             <td>{{ $item->name }}</td>
                             <td>{{ $item->email }}</td>
                             <td>
-                                <a href="{{ $item->website }}" target="_blank" class="text-decoration-none">{{ $item->website }}</a>
+                                <a href="{{ $item->website }}" target="_blank" class="text-decoration-none">{{ Str::limit($item->website, 60) }}</a>
                             </td>
                             <td>
                                 <img src="{{ asset('storage/' . $item->logo) }}" alt="Logo" class="img-thumbnail" width="50">

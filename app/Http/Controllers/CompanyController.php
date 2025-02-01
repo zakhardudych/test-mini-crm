@@ -66,7 +66,7 @@ class CompanyController extends Controller
      */
     public function update(EditCompanyRequest $request, Company $company)
     {
-        $company = $this->service->editCompany($request->validated(), $company);
+        $company = $this->service->editCompany($request, $company);
         return redirect()->route('companies.show', $company)->with('success', 'Company updated successfully');
 
     }
