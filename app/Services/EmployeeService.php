@@ -6,16 +6,10 @@ use App\Exceptions\EmployeeException;
 use App\Models\Company;
 use App\Models\Employee;
 use Exception;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
 
 class EmployeeService
 {
-
-    public function employeesList(Company $company): LengthAwarePaginator
-    {
-        return $company->employees()->paginate(10);
-    }
 
     /**
      * @throws EmployeeException
