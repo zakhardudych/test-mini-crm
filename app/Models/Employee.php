@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property $first_name
  * @property $last_name
  * @property $email
+ * @property $phone
  * @property $company_id
  */
 class Employee extends Model

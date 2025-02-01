@@ -2,10 +2,10 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Storage;
 
 /**
  * @property int $id
@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Storage;
  */
 class Company extends Model
 {
+    use HasFactory;
     protected $table = 'companies';
 
     protected $fillable = [
@@ -29,10 +30,5 @@ class Company extends Model
     public function employees(): HasMany
     {
         return $this->hasMany(Employee::class);
-    }
-
-    public function getLogoUrlAttribute(): ?string
-    {
-        return $this->logo ? Storage::url($this->logo) : null;
     }
 }
