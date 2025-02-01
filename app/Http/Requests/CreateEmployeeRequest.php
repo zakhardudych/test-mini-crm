@@ -12,7 +12,7 @@ class CreateEmployeeRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -25,8 +25,8 @@ class CreateEmployeeRequest extends FormRequest
         return [
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
-            'email' => 'required|string|email|unique:employees',
-            'phone' => 'required|string|max:255|regex:/^\+[0-9]{12}$/|unique:employees',
+            'email' => 'required|string|email',
+            'phone' => 'required|string|max:255|regex:/^\+[0-9]{12}$/',
         ];
     }
 }

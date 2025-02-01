@@ -12,7 +12,7 @@ class CreateCompanyRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -23,9 +23,9 @@ class CreateCompanyRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:255|unique:companies',
-            'email' => 'nullable|string|email|unique:companies',
-            'logo' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048|dimensions:min_width=100,min_height=100',
+            'name' => 'required|string|max:255',
+            'email' => 'nullable|string|email',
+            'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048|dimensions:min_width=100,min_height=100',
             'website' => 'nullable|string|url',
         ];
     }
