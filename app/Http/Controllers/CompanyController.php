@@ -7,8 +7,8 @@ use App\Http\Requests\CreateCompanyRequest;
 use App\Http\Requests\EditCompanyRequest;
 use App\Models\Company;
 use App\Services\CompanyService;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 
 class CompanyController extends Controller
 {
@@ -21,7 +21,7 @@ class CompanyController extends Controller
      */
     public function index(): View
     {
-        return view('companies.index', $this->service->companiesList());
+        return view('companies.index', ['data' => $this->service->companiesList()]);
     }
 
     /**
@@ -38,7 +38,8 @@ class CompanyController extends Controller
      */
     public function store(CreateCompanyRequest $request)
     {
-        $this->service->createCompany($request->validated());
+        $this->service->createCompany($request);
+        session()->flash('success', 'Company created successfully!');
         return redirect()->route('companies.index')->with('success', 'Company created successfully');
     }
 
@@ -47,7 +48,8 @@ class CompanyController extends Controller
      */
     public function show(Company $company): View
     {
-        return view('companies.show', $company);
+        $employees = $company->employees()->paginate(10);
+        return view('companies.show', compact('company', 'employees'));
     }
 
     /**
@@ -55,7 +57,7 @@ class CompanyController extends Controller
      */
     public function edit(Company $company): View
     {
-        return view('companies.edit', $company);
+        return view('companies.edit', compact('company'));
     }
 
     /**
@@ -73,9 +75,9 @@ class CompanyController extends Controller
      * Remove the specified resource from storage.
      * @throws CompanyException
      */
-    public function destroy(Company $company): JsonResponse
+    public function destroy(Company $company): RedirectResponse
     {
         $this->service->deleteCompany($company);
-        return response()->json(['message' => 'Company deleted successfully']);
+        return redirect()->route('companies.index')->with('success', 'Company deleted successfully!');
     }
 }

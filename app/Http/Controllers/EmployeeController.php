@@ -18,19 +18,11 @@ class EmployeeController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
-     */
-    public function index(Company $company): View
-    {
-        return view('employees.index', $this->service->employeesList($company));
-    }
-
-    /**
      * Show the form for creating a new resource.
      */
-    public function create(): View
+    public function create(Company $company): View
     {
-        return view('employees.create');
+        return view('employees.create', compact('company'));
     }
 
     /**
@@ -40,7 +32,7 @@ class EmployeeController extends Controller
     public function store(CreateEmployeeRequest $request, Company $company): RedirectResponse
     {
         $this->service->createEmployee($request->validated(), $company);
-        return redirect()->route('employees.index')->with('success', 'Employee created successfully');
+        return redirect()->route('companies.show', $company)->with('success', 'Employee created successfully');
     }
 
     /**
@@ -48,7 +40,7 @@ class EmployeeController extends Controller
      */
     public function show(Employee $employee): View
     {
-        return view('employees.show', $employee);
+        return view('employees.show', compact('employee'));
     }
 
     /**
@@ -56,7 +48,7 @@ class EmployeeController extends Controller
      */
     public function edit(Employee $employee): View
     {
-        return view('employees.edit', $employee);
+        return view('employees.edit', compact('employee'));
     }
 
     /**
@@ -66,7 +58,7 @@ class EmployeeController extends Controller
     public function update(EditEmployeeRequest $request, Employee $employee): RedirectResponse
     {
         $employee = $this->service->updateEmployee($request->validated(), $employee);
-        return redirect()->route('employees.show', $employee)->with('success', 'Employee updated successfully');
+        return redirect()->route('companies.show', $employee->company_id)->with('success', 'Employee updated successfully');
     }
 
     /**
@@ -75,7 +67,8 @@ class EmployeeController extends Controller
      */
     public function destroy(Employee $employee)
     {
+        $companyId = $employee->company_id;
         $this->service->deleteEmployee($employee);
-        return response()->json(['message' => 'Employee deleted successfully']);
+        return redirect()->route('companies.show', $companyId)->with('success', 'Employee deleted successfully!');
     }
 }
